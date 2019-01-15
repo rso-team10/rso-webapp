@@ -31,21 +31,21 @@ class FirstPage extends React.Component<{}, IState> {
 
     public componentDidMount() {
         // console.log("start didMount");
-        fetch('http://localhost:8081/v1/artists')
+        fetch('http://104.197.193.254:8081/v1/artists')
             .then(response => response.json())
             .then(json => {
                 const data = json.map((val: any) => val.name);
                 this.setState({artists: data})
             });
 
-        fetch('http://localhost:8081/v1/tracks')
+        fetch('http://104.197.193.254:8081/v1/tracks')
             .then(response => response.json())
             .then(json => {
                 const data: ITrack[] = json.map((val: any) => {
                     return {id: val.id, name: val.name, genre: val.genre, active: val.active}
                 });
                 data.forEach(track => {
-                    const listenUrl = "http://localhost:8082/v1/listen/" + track.id;
+                    const listenUrl = "http://35.239.141.160:8082/v1/listen/" + track.id;
                     fetch(listenUrl)
                         .then(response2 => response2.json())
                         .then(json2 => {
@@ -55,7 +55,7 @@ class FirstPage extends React.Component<{}, IState> {
                 });
             });
 
-        fetch("http://localhost:8082/v1/upload/")
+        fetch("http://35.239.141.160:8082/v1/upload/")
             .then(response => response.json())
             .then(json => {
                 const data: IUpload[] = json.map((val: any) => {
@@ -66,7 +66,7 @@ class FirstPage extends React.Component<{}, IState> {
     }
 
     public listen(trackId: number) {
-        fetch("http://localhost:8083/v1/storage/" + trackId).then(response => response.text()).then(text => {
+        fetch("http://35.225.222.102:8083/v1/storage/" + trackId).then(response => response.text()).then(text => {
             const track = this.state.upload.find(up => up.trackId === trackId);
             if (track != null) {
                 track.trackUrl = text;
